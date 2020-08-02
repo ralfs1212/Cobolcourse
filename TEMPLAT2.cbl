@@ -8,6 +8,8 @@
       *                                                              *
       * Inital Version   07/28/2020                                  *
       * Page Break Added 07/29/2020                                  *
+      * minor reworks    08/02/2020                                  *
+      *                                                              *
       * RALF STRAUBE                                                 *
       *                                                              *
       * future additions: report header written                      *
@@ -30,6 +32,7 @@
 
       * Example input file structure with 3 fields 80 Bytes     *
       * e.g. JCL instream file                                  *
+      *                                                         *
        01 INPUT-REC.
           05 FLD-KEY               PIC X(10).
           05 FLD-NUMERIC           PIC 99999.
@@ -62,7 +65,7 @@
           05 CTR-LINES-MAX         PIC 99      VALUE 3.
 
 
-      * Print lines (Example Report)
+      * Print lines (Example Report)                            *
 
 
        01 HEADING-1.
@@ -135,13 +138,13 @@
            END-IF.
 
        220-VALIDATE-DATA.
-      ***********************************************************
-      * Data validation for every input field, saving           *
-      * indexes and named conditions for further processing     *
-      ***********************************************************
+      ************************************************************
+      * Data validation for every input field, saving            *
+      * indexes and named conditions for further processing      *
+      ************************************************************
            DISPLAY '220-VALIDATE-DATA'.
 
-      * Validate first field                                    *
+      * Validate first field                                     *
            IF FLD-KEY OF INPUT-REC EQUAL TO SPACES
               THEN
               DISPLAY "** Key Field Error! **"
@@ -150,14 +153,14 @@
               EXIT PARAGRAPH
            END-IF.
 
-      * Validate second  field                                  *
+      * Validate second  field                                   *
            IF FLD-ALPHA OF INPUT-REC EQUAL TO SPACES
               THEN
               DISPLAY "** Data Field Error: blank Field **"
               MOVE "N" TO VALID-DATA-STATUS
               EXIT PARAGRAPH
            END-IF.
-      * Validate third  field                                   *
+      * Validate third  field                                    *
            IF FLD-NUMERIC OF INPUT-REC EQUAL TO ZERO
               THEN
               DISPLAY "** Data Field Error: non numeric Field **"
@@ -165,13 +168,13 @@
               EXIT PARAGRAPH
            END-IF.
 
-      * at this point all tests have been successfuly passed    *
+      * at this point all tests have been successfuly passed     *
            MOVE "Y" TO VALID-DATA-STATUS.
 
        300-OPEN-FILES.
-      ************************************************************
-      * Open files                                               *
-      ************************************************************
+      *************************************************************
+      * Open files                                                *
+      *************************************************************
            DISPLAY '300-OPEN-FILES'.
            OPEN INPUT INPUT-FILE.
            IF NOT INPUT-FILE-OK
@@ -183,7 +186,7 @@
            OPEN OUTPUT OUTPUT-FILE.
            IF NOT OUTPUT-FILE-OK
               THEN
-              DISPLAY 'Input File Problem: ' OUTPUT-FILE-ST
+              DISPLAY 'Output File Problem: ' OUTPUT-FILE-ST
               GOBACK
            END-IF.
        400-READ-INPUT-FILE.
@@ -226,9 +229,11 @@
               AFTER ADVANCING 2.
            MOVE ZERO TO CTR-LINES.
 
-      * if PageNo. at bottom of page counter is incremented here*
+      * if PageNo. at bottom of page counter->  increment here  *
       * (else increment before printing)                        *
+
            ADD 1 TO CTR-PAGES.
+
        520-PAGE-FOOTING.
       ***********************************************************
       * Page Footing                                            *
@@ -242,8 +247,11 @@
       * Write summary at end of report                          *
       ***********************************************************
            DISPLAY '700-WRITE-SUMMARY'.
-           DISPLAY "Records read / valid  / Total"
-           DISPLAY WS-REC-KTR WS-REC-KTR-VALID WS-ACCUM-FLD-NUMERIC.
+           DISPLAY "Records read / valid  / Total:".
+
+           DISPLAY WS-REC-KTR " / " WS-REC-KTR-VALID " / "
+      -    WS-ACCUM-FLD-NUMERIC.
+
            PERFORM 520-PAGE-FOOTING.
       ***********************************************************
       * Close all Files                                         *
@@ -259,7 +267,7 @@
            CLOSE OUTPUT-FILE.
            IF NOT OUTPUT-FILE-OK
               THEN
-              DISPLAY 'Input File Problem: ' INPUT-FILE-ST
+              DISPLAY 'Output File Problem: ' OUTPUT-FILE-ST
               GOBACK
            END-IF.
 
