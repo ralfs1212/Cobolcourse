@@ -321,6 +321,7 @@
                 DISPLAY "** Policy Type not valid! ** " DET-POLICY-TYPE
                 MOVE "N" TO VALID-DATA-STATUS
                 EXIT PARAGRAPH
+           END-EVALUATE.     
 
       * Validating Policy Date Fields: have to be defined value
 
