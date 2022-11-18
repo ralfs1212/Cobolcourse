@@ -1,0 +1,8 @@
+       01 SUPPLIERS.
+          05 SUPPLIER-CODE       PIC       X(05) VALUE SPACES.
+          05 SUPPLIER-TYPE       PIC       X(01) VALUE SPACES.
+          05 SUPPLIER-NAME       PIC       X(15) VALUE SPACES.
+          05 SUPPLIER-PERF       PIC  9(03) COMP VALUE ZEROS.
+          05 SUPPLIER-RATING     PIC   X(01)     VALUE SPACES.
+          05 SUPPLIER-STATUS     PIC X(01)       VALUE SPACES.
+          05 SUPPLIER-ACT-DATE   PIC X(08)       VALUE SPACES.
